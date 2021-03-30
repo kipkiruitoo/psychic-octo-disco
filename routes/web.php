@@ -9,6 +9,7 @@ use App\Http\Controllers\TvController;
 
 Route::get('/', [MoviesController::class, 'index'])->name('movies.index');
 Route::get('/movies/{id}', [MoviesController::class, 'show'])->name('movies.show');
+Route::get('/movies/player/{hash}', [MoviesController::class, 'player'])->name('movies.player');
 
 Route::get('/tv', [TvController::class, 'index'])->name('tv.index');
 Route::get('/tv/{id}', [TvController::class, 'show'])->name('tv.show');

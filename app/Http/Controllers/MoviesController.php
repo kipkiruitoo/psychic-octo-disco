@@ -130,4 +130,11 @@ class MoviesController extends Controller
 
         return $streams;
     }
+
+    public function player($hash)
+    {
+
+        $streamurl = 'http://127.0.0.1:11470/' . $hash . '/0';
+        return view('movies.player', compact('streamurl'));
+    }
 }
