@@ -80,7 +80,7 @@ class MoviesController extends Controller
 
         $tbp_torrents = $this->getTorrents($id);
 
-        return view('movies.show', $viewModel)->with(["torrents" => $tbp_torrents]);
+        return view('movies.show', $viewModel)->with(["torrents" => $tbp_torrents, 'id' => $id]);
     }
 
     /**
@@ -120,7 +120,7 @@ class MoviesController extends Controller
     public function getTorrents($id)
     {
         $baseUrl =
-            'http://localhost:7000';
+            'https://thepiratebay-plus.strem.fun';
 
         $url = $baseUrl . '/stream/movie/' . $id . '.json';
 
@@ -131,10 +131,19 @@ class MoviesController extends Controller
         return $streams;
     }
 
-    public function player($hash)
+    public function player($hash, $id)
     {
+        $movie = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images')
+            ->json();
 
-        $streamurl = 'http://127.0.0.1:11470/' . $hash . '/0';
-        return view('movies.player', compact('streamurl'));
+        $viewModel = new MovieViewModel($movie);
+
+        $tbp_torrents = $this->getTorrents($id);
+
+        $streamurl = 'http://165.227.156.95:11470/' . $hash . '/0';
+
+        // dd($streamurl);
+        return view('movies.player', $viewModel)->with(['streamurl' => $streamurl, "torrents" => $tbp_torrents, 'id' => $id]);
     }
 }
