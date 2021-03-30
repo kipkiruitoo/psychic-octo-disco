@@ -34,6 +34,31 @@ $tr = $torrents["streams"];
             <p class="text-gray-300 mt-8">
                 {{ $movie['overview'] }}
             </p>
+            <div class="mt-12">
+                <h4 class="text-white font-semibold">Servers</h4>
+                <small>click on any of the servers to start streaming or download</small>
+                <div class="flex py-3 text-sm mt-4">
+                    <ul>
+                        @foreach ($tr as $torrent)
+                        <li>
+                            <a href="{{route('movies.player',[$torrent['infoHash'], $id] )}}">
+                                <div
+                                    class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
+                                    <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+                                    <div class="flex-grow font-medium px-2">{{$torrent['title']}}</div>
+                                    <div class="text-sm font-normal text-gray-500 tracking-wide">{{$torrent['name']}}
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+
+
+
+
+                </div>
+            </div>
 
             <div class="mt-12">
                 <h4 class="text-white font-semibold">Featured Crew</h4>
@@ -47,22 +72,7 @@ $tr = $torrents["streams"];
                     @endforeach
                 </div>
             </div>
-            <div class="mt-12">
-                <h4 class="text-white font-semibold">Servers</h4>
-                <div class="flex py-3 text-sm mt-4">
-                    @foreach ($tr as $torrent)
-                    <a href="{{route('movies.player',[$torrent['infoHash'], $id] )}}">
-                        <div
-                            class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
-                            <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
-                            <div class="flex-grow font-medium px-2">{{$torrent['title']}}</div>
-                            <div class="text-sm font-normal text-gray-500 tracking-wide">{{$torrent['name']}}</div>
-                        </div>
-                    </a>
 
-                    @endforeach
-                </div>
-            </div>
 
             <div x-data="{ isOpen: false }">
                 @if (count($movie['videos']['results']) > 0)
