@@ -14,12 +14,22 @@ class SearchDropdown extends Component
         $searchResults = [];
 
         if (strlen($this->search) >= 2) {
-            $searchResults = Http::withToken(config('services.tmdb.token'))
-                ->get('https://api.themoviedb.org/3/search/movie?query='.$this->search)
-                ->json()['results'];
+            $series = Http::withToken(config('services.tmdb.token'))
+                ->get('https://v4-cinemeta.strem.io/catalog/series/top/search=' . $this->search . '.json')
+                ->json()['metas'];
+
+            $movies =
+                Http::withToken(config('services.tmdb.token'))
+                    ->get('https://v4-cinemeta.strem.io/catalog/movie/top/search=' . $this->search . '.json')
+                    ->json()['metas'];
+
+
+            $searchResults = array_merge($movies, $series);
+
+            shuffle($searchResults);
         }
 
-        // dump($searchResults);
+        // dd($searchResults);
 
         return view('livewire.search-dropdown', [
             'searchResults' => collect($searchResults)->take(7),
