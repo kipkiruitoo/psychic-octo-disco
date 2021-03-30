@@ -16,22 +16,27 @@ class MoviesController extends Controller
      */
     public function index()
     {
+        $nowPlayingMoviesurl = "https://cinemeta.strem.io/stremioget/stremio/v1/q.json?b=eyJwYXJhbXMiOltudWxsLHsicXVlcnkiOnsidHlwZSI6Im1vdmllIn0sImxpbWl0Ijo3MH1dLCJtZXRob2QiOiJtZXRhLmZpbmQiLCJpZCI6MSwianNvbnJwYyI6IjIuMCJ9";
+
+        $popularMoviesurl = "";
+        // dd(Http::get($stremio_init_url)->json());
         $popularMovies = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/popular')
-            ->json()['results'];
+            ->get($nowPlayingMoviesurl)
+            ->json()['result'];
 
-        $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/now_playing')
-            ->json()['results'];
+        // dd($popularMovies);
 
-        $genres = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/genre/movie/list')
-            ->json()['genres'];
+        // $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))
+        //     ->get('https://api.themoviedb.org/3/movie/now_playing')
+        //     ->json()['results'];
+
+        // $genres = Http::withToken(config('services.tmdb.token'))
+        //     ->get('https://api.themoviedb.org/3/genre/movie/list')
+        //     ->json()['genres'];
 
         $viewModel = new MoviesViewModel(
-            $popularMovies,
-            $nowPlayingMovies,
-            $genres,
+            $popularMovies
+
         );
 
         return view('movies.index', $viewModel);
@@ -67,12 +72,15 @@ class MoviesController extends Controller
     public function show($id)
     {
         $movie = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/'.$id.'?append_to_response=credits,videos,images')
+            ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images')
             ->json();
 
+        // dd($movie);
         $viewModel = new MovieViewModel($movie);
 
-        return view('movies.show', $viewModel);
+        $tbp_torrents = $this->getTorrents($id);
+
+        return view('movies.show', $viewModel)->with(["torrents" => $tbp_torrents]);
     }
 
     /**
@@ -107,5 +115,19 @@ class MoviesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getTorrents($id)
+    {
+        $baseUrl =
+            'http://localhost:7000';
+
+        $url = $baseUrl . '/stream/movie/' . $id . '.json';
+
+        $streams =  Http::withHeaders([])->get($url)->json();
+
+        // dd($request);
+
+        return $streams;
     }
 }
