@@ -2,13 +2,20 @@
 @php
 
 $tr = $torrents["streams"];
+// dd($movie)
 @endphp
 @section('head')
+
+@section('title')
+Watch {{$movie['title']}} on Tea Movies
+@endsection
 {{-- <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
 <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script> --}}
 @endsection
 @section('content')
-
+<div class="mt-10 mb-10 p-4">
+    <small>Click on the Player to start watching</small>
+</div>
 <video class="h-full w-full mr-8 p-2" src="{{$streamurl}}" controls></video>
 
 <div class="movie-info border-b border-gray-800">

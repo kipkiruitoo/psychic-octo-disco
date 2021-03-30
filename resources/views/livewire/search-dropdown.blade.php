@@ -29,6 +29,9 @@
             @if ($searchResults->count() > 0)
                 <ul>
                     @foreach ($searchResults as $result)
+                        @php
+                            // dd($result)
+                        @endphp
                         <li class="border-b border-gray-700">
                             <a
                                 href="{{ route('movies.show', $result['id']) }}" class="block hover:bg-gray-700 px-3 py-3 flex items-center transition ease-in-out duration-150"
