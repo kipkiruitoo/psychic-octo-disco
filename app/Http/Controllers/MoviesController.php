@@ -141,7 +141,7 @@ class MoviesController extends Controller
 
         $tbp_torrents = $this->getTorrents($id);
 
-        $streamurl = 'http://165.227.156.95:11470/' . $hash . '/0';
+        $streamurl = 'http://server.teamovies.tk/' . $hash . '/0';
 
         // dd($streamurl);
         return view('movies.player', $viewModel)->with(['streamurl' => $streamurl, "torrents" => $tbp_torrents, 'id' => $id]);
