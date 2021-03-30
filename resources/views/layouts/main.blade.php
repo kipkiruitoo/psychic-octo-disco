@@ -2,14 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tea Movies - @yield('title') </title>
-
-
-
+    {{-- <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
     <link rel="stylesheet" href="/css/main.css">
-
+    {{ seo()->render() }}
     @yield('head')
     <livewire:styles>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
@@ -45,10 +41,10 @@
         </div>
     </nav>
     @yield('content')
+    {{ seo('body')->render() }}
     <footer class="border border-t border-gray-800">
         <div class="container mx-auto text-sm px-4 py-6">
-            Powered by <a href="https://www.themoviedb.org/documentation/api" class="underline hover:text-gray-300">TMDb
-                API</a>
+            Powered by <a href="https://www.stremio.com/" class="underline hover:text-gray-300">Stremio</a>
         </div>
     </footer>
     <livewire:scripts>

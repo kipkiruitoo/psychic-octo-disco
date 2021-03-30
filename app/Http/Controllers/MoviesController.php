@@ -78,6 +78,9 @@ class MoviesController extends Controller
         // dd($movie);
         $viewModel = new MovieViewModel($movie);
 
+        seo()->title('Watch ' . $movie['title'] . ' for free on Tea Movies');
+        seo()->description($movie['overview']);
+
         $tbp_torrents = $this->getTorrents($id);
 
         return view('movies.show', $viewModel)->with(["torrents" => $tbp_torrents, 'id' => $id]);
@@ -143,7 +146,9 @@ class MoviesController extends Controller
 
         $streamurl = 'https://server.teamovies.tk/' . $hash . '/0';
 
-        // dd($streamurl);
+        seo()->title('Watching ' . $movie['title'] . ' for free on Tea Movies');
+        seo()->description($movie['overview']);
+        // seo()->image($post->thumbnail);
         return view('movies.player', $viewModel)->with(['streamurl' => $streamurl, "torrents" => $tbp_torrents, 'id' => $id]);
     }
 }

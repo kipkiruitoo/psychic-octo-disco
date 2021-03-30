@@ -1,13 +1,12 @@
 @extends('layouts.main')
 @php
-// dd($torrents);
-
-// dd($id);
 
 $tr = $torrents["streams"];
 @endphp
-
-
+@section('head')
+<meta name="keywords"
+    content="{{$movie['title']}}, tea movies, netflix movies, 123 movies,  free movies, marvel movies in order, bmovies" />
+@endsection
 @section('content')
 <div class="movie-info border-b border-gray-800">
     <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
