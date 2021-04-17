@@ -9,6 +9,9 @@
     @yield('head')
     <livewire:styles>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+        <script data-ad-client="ca-pub-8350234676394186" async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
 
 <body class="font-sans bg-gray-900 text-white">
