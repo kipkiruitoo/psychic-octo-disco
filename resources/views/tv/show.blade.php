@@ -44,9 +44,10 @@
                 <h5>Seasons</h5>
                 <nav class="tabs flex flex-col sm:flex-row">
                     @foreach ($seasons as $season)
-                    <button data-target="panel-{{$season[0]['season']}}"
-                        class="tab {{$season[0]['season'] == 1? 'active' : ''}}  text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
-                        Season {{$season[0]['season']}}
+
+                    <button data-target="panel-{{$season['id']}}"
+                        class="tab {{$season['season_number'] == 1? 'active' : ''}}  text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500">
+                         {{$season['name']}}
                     </button>
                     @endforeach
                 </nav>
@@ -55,17 +56,17 @@
                 <div id="panels" class="bg-white p-10">
                     @foreach ($seasons as $season)
                     <div
-                        class="panel-{{$season[0]['season']}} tab-content {{$season[0]['season'] == 1? 'active' : ''}} py-5">
+                        class="panel-{{$season['id']}} tab-content {{$season['season_number'] == 1? 'active' : ''}} py-5">
                         <ul>
-                            @foreach ($season as $episode)
+                            @foreach ($season['episodes'] as $episode)
                             <li>
                                 <a
-                                    href="{{route('tv.episode',[$id, $episode['season'], $episode['number']] )}}">
+                                    href="{{route('tv.episode',[$id, $season['season_number'], $episode['episode_number']] )}}">
                                     <div
                                         class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 ">
                                         {{-- <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span> --}}
                                         <div class="text-black font-medium px-2">
-                                            {{$episode['season']}}.{{$episode['number']}}</div>
+                                            {{$episode['season_number']}}.{{$episode['episode_number']}} - {{$episode['name']}}</div>
                                         <div class="text-sm font-small text-gray-800 tracking-wide">{{$episode['name']}}
                                         </div>
                                     </div>

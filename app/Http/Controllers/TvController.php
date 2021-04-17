@@ -16,15 +16,24 @@ class TvController extends Controller
      */
     public function index()
     {
-        $url = 'https://cinemeta.strem.io/stremioget/stremio/v1/q.json?b=eyJwYXJhbXMiOltudWxsLHsicXVlcnkiOnsidHlwZSI6InNlcmllcyJ9LCJsaW1pdCI6NzB9XSwibWV0aG9kIjoibWV0YS5maW5kIiwiaWQiOjEsImpzb25ycGMiOiIyLjAifQ==';
+        $url = 'https://api.themoviedb.org/3/tv/popular';
         $popularTv = Http::withToken(config('services.tmdb.token'))
             ->get($url)
-            ->json()['result'];
-        // dd($popularTv);
-        $viewModel = new TvViewModel(
-            $popularTv
-        );
+            ->json()['results'];
 
+        $topRatedTv = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/tv/top_rated')
+            ->json()['results'];
+
+        $genres = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/genre/tv/list')
+            ->json()['genres'];
+
+        $viewModel = new TvViewModel(
+            $popularTv,
+            $topRatedTv,
+            $genres,
+        );
 
 
         return view('tv.index', $viewModel);
@@ -60,18 +69,29 @@ class TvController extends Controller
     public function show($id)
     {
 
-        $url = 'https://v4-cinemeta.strem.io/meta/series/' . $id . '.json';
-
         $tvshow = Http::withToken(config('services.tmdb.token'))
-            ->get($url)
-            ->json()["meta"];
+        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=credits,videos,images')
+        ->json();
 
-        $episodes = $tvshow['episodes'];
 
-        $seasons = collect($episodes)->groupBy('season');
+        // dd($tvshow);
+
+
+        $seasons = $tvshow['seasons'];
+
+        foreach ($seasons as $key => $season) {
+
+            $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=credits,videos,images';
+            $e = Http::withToken(config('services.tmdb.token'))->get($url)
+            ->json();
+
+            $seasons[$key]["episodes"] = $e["episodes"];
+        }
+
+        // dd($seasons);
 
         seo()->title('Watching ' . $tvshow['name'] . ' for free on Tea Movies');
-        seo()->description($tvshow['description']);
+        // seo()->description($tvshow['description']);
 
         $viewModel = new TvShowViewModel($tvshow);
 
@@ -81,17 +101,26 @@ class TvController extends Controller
 
     public function episode($id, $season, $episode)
     {
-        $url = 'https://v4-cinemeta.strem.io/meta/series/' . $id . '.json';
-
         $tvshow = Http::withToken(config('services.tmdb.token'))
-            ->get($url)
-            ->json()["meta"];
+        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=credits,videos,images')
+        ->json();
 
-        $episodes = $tvshow['episodes'];
 
-        $seasons = collect($episodes)->groupBy('season');
+        // dd($tvshow);
 
-        $tbp_torrents = $this->getTorrents($id, $season, $episode);
+
+        $seasons = $tvshow['seasons'];
+
+        foreach ($seasons as $key => $season) {
+
+            $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=credits,videos,images';
+            $e = Http::withToken(config('services.tmdb.token'))->get($url)
+                ->json();
+
+            $seasons[$key]["episodes"] = $e["episodes"];
+        }
+
+        $tbp_torrents = $this->getTorrents($id, $season['season_number'], $episode);
 
         // dd($tbp_torrents);
 
@@ -152,6 +181,7 @@ class TvController extends Controller
 
     public function getTorrents($id, $season, $episode)
     {
+        // dd($season);
         $baseUrl =
             'https://thepiratebay-plus.strem.fun';
 
