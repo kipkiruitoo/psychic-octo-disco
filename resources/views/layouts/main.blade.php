@@ -12,6 +12,8 @@
 
         <script data-ad-client="ca-pub-8350234676394186" async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
 </head>
 
 <body class="font-sans bg-gray-900 text-white">
@@ -52,6 +54,7 @@
     </footer>
     <livewire:scripts>
         @yield('scripts')
+        <script type="text/javascript" data-adel="atag" src="//achcdn.com/script/atg.js" czid="5wgi4kin"></script>
 </body>
 
 </html>
