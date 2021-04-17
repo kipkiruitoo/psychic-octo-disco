@@ -5,6 +5,33 @@
     {{-- <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
     <link rel="stylesheet" href="/css/main.css">
+    <meta name="keywords" content="action thriller movies,
+action thriller,
+action thriller movies 2019,
+action thriller movies 2020,
+thriller drama movies,
+adventure thriller movies,
+drama thriller,
+2020 crime movies,
+action and thriller movies,
+crime action thriller movies,
+thriller action movies 2019,
+thriller 2021,
+thriller action movies 2020,
+crime thriller action movies,
+2020 action thriller movies,
+action thriller 2020,
+action thriller 2019,
+thriller sci fi,
+2019 action thriller movies,
+action thriller 2020 movies,
+action thriller films,
+action adventure thriller movies,
+thriller drama movies 2019,
+action thriller books,
+mystery action thriller movies,
+tea movies, netflix movies, 123 movies,  free movies, marvel movies in order, bmovies
+" />
     {{ seo()->render() }}
     @yield('head')
     <livewire:styles>

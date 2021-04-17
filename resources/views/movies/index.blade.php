@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('head')
-<meta name="keywords" content="tea movies, netflix movies, 123 movies,  free movies, marvel movies in order, bmovies" />
+
 @endsection
 @section('content')
 <div class="container mx-auto px-4 pt-16">

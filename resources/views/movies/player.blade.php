@@ -128,3 +128,4 @@ $tr = $torrents["streams"];
     </div>
 </div>
 @endsection
+
