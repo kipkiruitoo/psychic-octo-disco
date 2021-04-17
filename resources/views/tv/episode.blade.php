@@ -16,7 +16,7 @@ $movie = $tvshow;
 
 @section('content')
 <div class="mt-10 mb-10 p-4">
-    <small>Watching Season {{$season}} episode {{$episode}}</small>
+    <small>Watching Season {{$season['season_number']}} episode {{$episode}}</small>
     <br>
     <hr>
     <a href="{{route('tv.show', [$tvshow['id']])}}"><button class="bg-transparent mt-2 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"> < Back to Episodes</button></a>
@@ -55,7 +55,7 @@ $movie = $tvshow;
                     <ul>
                         @foreach ($tr as $torrent)
                         <li>
-                            <a href="{{route('tv.episode',[$id, $season, $episode] )}}?hash={{$torrent['infoHash']}}">
+                            <a href="{{route('tv.episode',[$id,$season['season_number'], $episode] )}}?hash={{$torrent['infoHash']}}">
                                 <div
                                     class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
                                     <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>

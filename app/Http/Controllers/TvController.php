@@ -70,7 +70,7 @@ class TvController extends Controller
     {
 
         $tvshow = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=credits,videos,images')
+        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=external_ids,credits,videos,images')
         ->json();
 
 
@@ -81,7 +81,7 @@ class TvController extends Controller
 
         foreach ($seasons as $key => $season) {
 
-            $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=credits,videos,images';
+            $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=external_ids,credits,videos,images';
             $e = Http::withToken(config('services.tmdb.token'))->get($url)
             ->json();
 
@@ -91,7 +91,7 @@ class TvController extends Controller
         // dd($seasons);
 
         seo()->title('Watching ' . $tvshow['name'] . ' for free on Tea Movies');
-        // seo()->description($tvshow['description']);
+        seo()->description($tvshow['overview']);
 
         $viewModel = new TvShowViewModel($tvshow);
 
@@ -102,25 +102,25 @@ class TvController extends Controller
     public function episode($id, $season, $episode)
     {
         $tvshow = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=credits,videos,images')
+        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=external_ids,credits,videos,images')
         ->json();
 
 
-        // dd($tvshow);
+        // dd($tvshow['external_ids']['imdb_id']);
 
 
         $seasons = $tvshow['seasons'];
 
         foreach ($seasons as $key => $season) {
 
-            $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=credits,videos,images';
+            $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=external_ids,credits,videos,images';
             $e = Http::withToken(config('services.tmdb.token'))->get($url)
                 ->json();
 
             $seasons[$key]["episodes"] = $e["episodes"];
         }
 
-        $tbp_torrents = $this->getTorrents($id, $season['season_number'], $episode);
+        $tbp_torrents = $this->getTorrents($tvshow['external_ids']['imdb_id'], $season, $episode);
 
         // dd($tbp_torrents);
 
@@ -137,7 +137,7 @@ class TvController extends Controller
         }
 
         seo()->title('Watching ' . $tvshow['name'] . ' for free on Tea Movies');
-        seo()->description($tvshow['description']);
+        seo()->description($tvshow['overview']);
 
         $streamurl =
             'https://server.teamovies.tk/' . $hash . '/0';
@@ -185,7 +185,7 @@ class TvController extends Controller
         $baseUrl =
             'https://thepiratebay-plus.strem.fun';
 
-        $url = $baseUrl . '/stream/series/' . $id . urlencode(':' . $season . ':' . $episode) . '.json';
+        $url = $baseUrl . '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
 
         $streams =  Http::withHeaders([])->get($url)->json();
 
