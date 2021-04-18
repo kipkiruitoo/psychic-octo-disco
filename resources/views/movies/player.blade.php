@@ -7,7 +7,7 @@ $tr = $torrents["streams"];
 
 
 @section('head')
-<meta name="keywords" content="{{$movie['title']}}, tea movies, netflix movies, 123 movies,  free movies, marvel movies in order, bmovies" />
+
 @endsection
 
 
@@ -128,4 +128,3 @@ $tr = $torrents["streams"];
     </div>
 </div>
 @endsection
-
