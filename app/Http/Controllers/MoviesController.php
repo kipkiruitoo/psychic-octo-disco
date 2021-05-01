@@ -17,17 +17,17 @@ class MoviesController extends Controller
     public function index()
     {
         $popularMovies = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/movie/popular')
-        ->json()['results'];
+            ->get('https://api.themoviedb.org/3/movie/popular')
+            ->json()['results'];
 
         // dd($popularMovies);
         $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/movie/now_playing')
-        ->json()['results'];
+            ->get('https://api.themoviedb.org/3/movie/now_playing')
+            ->json()['results'];
 
         $genres = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/genre/movie/list')
-        ->json()['genres'];
+            ->get('https://api.themoviedb.org/3/genre/movie/list')
+            ->json()['genres'];
 
         $viewModel = new MoviesViewModel(
             $popularMovies,
@@ -118,14 +118,31 @@ class MoviesController extends Controller
 
     public function getTorrents($id)
     {
-        $baseUrl =
+        $baseUrl1 =
             'https://thepiratebay-plus.strem.fun';
 
+        $baseUrl2 =
+            'https://torrentio.strem.fun';
+
+        $baseUrl =
+            'https://movies123-strem.herokuapp.com';
+
         $url = $baseUrl . '/stream/movie/' . $id . '.json';
+        $url1 = $baseUrl1 . '/stream/movie/' . $id . '.json';
+        $url2 = $baseUrl2 . '/stream/movie/' . $id . '.json';
 
-        $streams =  Http::withHeaders([])->get($url)->json();
+        $streams =  Http::withHeaders([])->get($url)->json()['streams'];
 
-        return $streams;
+        $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
+
+        $streams2 = Http::withHeaders([])->get($url2)->json()['streams'];
+
+
+        $finalStreams = array_merge($streams, $streams1, $streams2);
+
+        // dd($finalStreams);
+
+        return $finalStreams;
     }
 
     public function player($hash, $id)
@@ -137,8 +154,14 @@ class MoviesController extends Controller
         $viewModel = new MovieViewModel($movie);
 
         $tbp_torrents = $this->getTorrents($id);
+        if ($hash == "dl") {
+            $streamurl = request()->get('dlink');
 
-        $streamurl = 'https://server.teamovies.tk/' . $hash . '/0';
+            $streamurl = urldecode($streamurl);
+        }else{
+           $streamurl = 'https://server.teamovies.tk/' . $hash . '/0';
+        }
+
 
         seo()->title('Watching ' . $movie['title'] . ' for free on Tea Movies');
         seo()->description($movie['overview']);

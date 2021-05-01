@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @php
 
-$tr = $torrents["streams"];
+$tr = $torrents;
 
 @endphp
 

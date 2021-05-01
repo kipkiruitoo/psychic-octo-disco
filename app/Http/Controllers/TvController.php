@@ -126,21 +126,31 @@ class TvController extends Controller
 
         $viewModel = new TvShowViewModel($tvshow);
 
-        $streams = $tbp_torrents['streams'];
+        $streams = $tbp_torrents;
 
-        $rand = $streams[array_rand($streams, 1)];
+        $rand = $streams[1];
 
         if (isset(request()->hash)) {
             $hash = request()->hash;
         } else {
-            $hash = $rand['infoHash'];
+            $hash = "dl";
         }
 
         seo()->title('Watching ' . $tvshow['name'] . ' for free on Tea Movies');
         seo()->description($tvshow['overview']);
 
-        $streamurl =
-            'https://server.teamovies.tk/' . $hash . '/0';
+        if (isset(request()->dlink)) {
+             $streamurl = urldecode(request()->dlink);
+        }else{
+            if ($hash != 'dl') {
+                $streamurl =
+                'https://server.teamovies.tk/' . $hash . '/0';
+            }else{
+                $streamurl = $rand['url'];
+            }
+
+        }
+
 
         return view('tv.episode', $viewModel)->with(["torrents" => $tbp_torrents, 'id' => $id, 'streamurl' => $streamurl, 'season' => $season, 'episode' => $episode]);
     }
@@ -181,14 +191,33 @@ class TvController extends Controller
 
     public function getTorrents($id, $season, $episode)
     {
-        // dd($season);
+
+        $baseUrl1 =
+        'https://thepiratebay-plus.strem.fun';
+
+        $baseUrl2 =
+        'https://torrentio.strem.fun';
+
         $baseUrl =
-            'https://thepiratebay-plus.strem.fun';
+        'https://movies123-strem.herokuapp.com';
 
-        $url = $baseUrl . '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
+        $url = $baseUrl .
+        '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
+        $url1 = $baseUrl1 .
+        '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
+        $url2 = $baseUrl2 .
+        '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
 
-        $streams =  Http::withHeaders([])->get($url)->json();
+        $streams =  Http::withHeaders([])->get($url)->json()['streams'];
 
-        return $streams;
+        $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
+
+        $streams2 = Http::withHeaders([])->get($url2)->json()['streams'];
+
+
+        $finalStreams = array_merge($streams, $streams1, $streams2);
+
+
+        return $finalStreams;
     }
 }

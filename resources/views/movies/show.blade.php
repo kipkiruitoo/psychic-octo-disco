@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @php
 
-$tr = $torrents["streams"];
+$tr = $torrents;
 @endphp
 @section('head')
 <meta name="keywords"
@@ -40,15 +40,29 @@ $tr = $torrents["streams"];
                     <ul>
                         @foreach ($tr as $torrent)
                         <li>
-                            <a href="{{route('movies.player',[$torrent['infoHash'], $id] )}}">
-                                <div
-                                    class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
-                                    <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
-                                    <div class="flex-grow font-medium px-2">{{$torrent['title']}}</div>
-                                    <div class="text-sm font-normal text-gray-500 tracking-wide">{{$torrent['name']}}
+                            @if (isset($torrent['url']))
+                            <a href="{{route('movies.player',["dl" , $id] )}}?dl=true&dlink={{urlencode($torrent['url'])}}" >
+                                    <div
+                                        class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
+                                        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+                                        <div class="flex-grow font-medium px-2">{{$torrent['title']}}</div>
+                                        <div class="text-sm font-normal text-gray-500 tracking-wide">{{$torrent['name']}}
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            @else
+                                <a href="{{route('movies.player',[$torrent['infoHash'], $id] )}}">
+                                    <div
+                                        class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
+                                        <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+                                        <div class="flex-grow font-medium px-2">{{$torrent['title']}}</div>
+                                        <div class="text-sm font-normal text-gray-500 tracking-wide">{{$torrent['name']}}
+                                        </div>
+                                    </div>
+                                </a>
+
+                            @endif
+
                         </li>
                         @endforeach
                     </ul>
