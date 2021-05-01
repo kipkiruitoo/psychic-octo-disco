@@ -36,9 +36,9 @@ tea movies, netflix movies, 123 movies,  free movies, marvel movies in order, bm
     @yield('head')
     <livewire:styles>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-
+{{--
         <script data-ad-client="ca-pub-8350234676394186" async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> --}}
 
 
 </head>
@@ -81,7 +81,7 @@ tea movies, netflix movies, 123 movies,  free movies, marvel movies in order, bm
     </footer>
     <livewire:scripts>
         @yield('scripts')
-        <script type="text/javascript" data-adel="atag" src="//achcdn.com/script/atg.js" czid="5wgi4kin"></script>
+        {{-- <script type="text/javascript" data-adel="atag" src="//achcdn.com/script/atg.js" czid="5wgi4kin"></script> --}}
 </body>
 
 </html>
