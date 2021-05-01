@@ -146,7 +146,14 @@ class TvController extends Controller
                 $streamurl =
                 'https://server.teamovies.tk/' . $hash . '/0';
             }else{
-                $streamurl = $rand['url'];
+                if (isset($rand['url'])) {
+                    # code...
+                    $streamurl = $rand['url'];
+                }else{
+                    $streamurl =
+                        'https://server.teamovies.tk/' .  $rand['infoHash'] . '/0';
+                }
+
             }
 
         }

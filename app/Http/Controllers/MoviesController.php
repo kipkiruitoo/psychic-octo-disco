@@ -140,7 +140,6 @@ class MoviesController extends Controller
 
         $finalStreams = array_merge($streams, $streams1, $streams2);
 
-        // dd($finalStreams);
 
         return $finalStreams;
     }
@@ -154,6 +153,7 @@ class MoviesController extends Controller
         $viewModel = new MovieViewModel($movie);
 
         $tbp_torrents = $this->getTorrents($id);
+
         if ($hash == "dl") {
             $streamurl = request()->get('dlink');
 
@@ -161,6 +161,8 @@ class MoviesController extends Controller
         }else{
            $streamurl = 'https://server.teamovies.tk/' . $hash . '/0';
         }
+
+        // dd($tbp_torrents);
 
 
         seo()->title('Watching ' . $movie['title'] . ' for free on Tea Movies');
