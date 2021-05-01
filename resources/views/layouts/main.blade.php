@@ -5,7 +5,17 @@
     {{-- <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
     <link rel="stylesheet" href="/css/main.css">
+    <!-- Global site tag (gtag.js) - Google Ads: 825955770 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-825955770"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'AW-825955770');
+    </script>
     <meta name="keywords" content="action thriller movies,
+    free netflix, free movies, free series, download movies,
 action thriller,
 action thriller movies 2019,
 action thriller movies 2020,
