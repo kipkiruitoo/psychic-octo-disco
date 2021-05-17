@@ -14,19 +14,36 @@ class SearchDropdown extends Component
         $searchResults = [];
 
         if (strlen($this->search) >= 2) {
-            $series = Http::withToken(config('services.tmdb.token'))
-                ->get('https://v4-cinemeta.strem.io/catalog/series/top/search=' . $this->search . '.json')
-                ->json()['metas'];
+            $series =
+                Http::withToken(config('services.tmdb.token'))
+                    ->get('https://api.themoviedb.org/3/search/tv?query=' . $this->search)
+                    ->json()['results'];
+
+            $series =
+                collect($series)->map(function ($item) {
+                    // $item = collect($item);
+                    $item['type'] = "tv";
+
+                    return $item;
+                });
 
             $movies =
                 Http::withToken(config('services.tmdb.token'))
-                    ->get('https://v4-cinemeta.strem.io/catalog/movie/top/search=' . $this->search . '.json')
-                    ->json()['metas'];
+                    ->get('https://api.themoviedb.org/3/search/movie?query=' . $this->search)
+                    ->json()['results'];
+
+            $movies = collect($movies)->map(function ($item, $key) {
+                // $item = collect($item);
+                $item['type'] = "movie";
+
+                return $item;
+            });
 
 
-            $searchResults = array_merge($movies, $series);
+            $searchResults = array_merge($movies->toArray(), $series->toArray());
 
             shuffle($searchResults);
+            // dd($searchResults);
         }
 
         // dd($searchResults);
