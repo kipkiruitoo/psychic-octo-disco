@@ -7,15 +7,22 @@ $tr = $torrents;
 
 
 @section('head')
-
+<link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+<link href="https://unpkg.com/@videojs/themes@1/dist/city/index.css" rel="stylesheet" />
+<script src="https://unpkg.com/video.js/dist/video.js"></script>
+{{-- <script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script> --}}
 @endsection
 
 
 @section('content')
-<div class="mt-10 mb-10 p-4">
-    <small>Click on the Player to start watching</small>
+
+<div class=" justify-center m-8 p-8">
+    <video class="h-full w-full min-w-full max-w-screen-xl min-w-screen-md  vjs-default-skin video-js vjs-fluid "
+        id="video_player" controls autoplay>
+        <source src="{{$streamurl}}" type="application/x-mpegURL">
+    </video>
 </div>
-<video class="h-full w-full mr-8 p-2" src="{{$streamurl}}" controls></video>
+
 
 <div class="movie-info border-b border-gray-800">
     <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
@@ -49,6 +56,19 @@ $tr = $torrents;
                     <ul>
                         @foreach ($tr as $torrent)
                         <li>
+                            @if (isset($torrent['url']))
+                            <a
+                                href="{{route('movies.player',["dl" , $id] )}}?dl=true&dlink={{urlencode($torrent['url'])}}">
+                                <div
+                                    class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
+                                    <span class="bg-gray-400 h-2 w-2 m-2 rounded-full"></span>
+                                    <div class="flex-grow font-medium px-2">{{$torrent['title']}}</div>
+                                    <div class="text-sm font-normal text-gray-500 tracking-wide">
+                                        {{$torrent['name'] ?? ''}}
+                                    </div>
+                                </div>
+                            </a>
+                            @else
                             <a href="{{route('movies.player',[$torrent['infoHash'], $id] )}}">
                                 <div
                                     class="flex justify-start cursor-pointer text-white-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
@@ -58,6 +78,8 @@ $tr = $torrents;
                                     </div>
                                 </div>
                             </a>
+
+                            @endif
                         </li>
                         @endforeach
                     </ul>
@@ -127,4 +149,12 @@ $tr = $torrents;
         </div>
     </div>
 </div>
+
+<script>
+    window.onload = function () {
+           var player = videojs('video_player');
+    player.play();
+    }
+
+</script>
 @endsection

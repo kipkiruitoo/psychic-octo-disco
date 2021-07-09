@@ -70,8 +70,8 @@ class TvController extends Controller
     {
 
         $tvshow = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=external_ids,credits,videos,images')
-        ->json();
+            ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=external_ids,credits,videos,images')
+            ->json();
 
 
         // dd($tvshow);
@@ -83,7 +83,7 @@ class TvController extends Controller
 
             $url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $season['season_number'] . '?append_to_response=external_ids,credits,videos,images';
             $e = Http::withToken(config('services.tmdb.token'))->get($url)
-            ->json();
+                ->json();
 
             $seasons[$key]["episodes"] = $e["episodes"];
         }
@@ -102,8 +102,8 @@ class TvController extends Controller
     public function episode($id, $season, $episode)
     {
         $tvshow = Http::withToken(config('services.tmdb.token'))
-        ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=external_ids,credits,videos,images')
-        ->json();
+            ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=external_ids,credits,videos,images')
+            ->json();
 
 
         // dd($tvshow['external_ids']['imdb_id']);
@@ -128,7 +128,10 @@ class TvController extends Controller
 
         $streams = $tbp_torrents;
 
-        $rand = $streams[1];
+        if (count($streams) > 1) {
+            $rand = $streams[1];
+        }
+
 
         if (isset(request()->hash)) {
             $hash = request()->hash;
@@ -136,26 +139,26 @@ class TvController extends Controller
             $hash = "dl";
         }
 
-        seo()->title('Watching ' . $tvshow['name'] . ' for free on Tea Movies');
+        seo()->title('Watch ' . $tvshow['name'] . ' for free on Tea Movies');
         seo()->description($tvshow['overview']);
 
         if (isset(request()->dlink)) {
-             $streamurl = urldecode(request()->dlink);
-        }else{
+            $streamurl = urldecode(request()->dlink);
+        } else {
             if ($hash != 'dl') {
                 $streamurl =
-                'https://server.teamovies.tk/' . $hash . '/0';
-            }else{
+                    'https://server.teamovies.tk/' . $hash . '/0';
+            } else {
                 if (isset($rand['url'])) {
                     # code...
                     $streamurl = $rand['url'];
-                }else{
+                } else if (isset($rand['infoHash']))  {
                     $streamurl =
                         'https://server.teamovies.tk/' .  $rand['infoHash'] . '/0';
+                }else{
+                    $streamurl = "no url";
                 }
-
             }
-
         }
 
 
@@ -199,30 +202,30 @@ class TvController extends Controller
     public function getTorrents($id, $season, $episode)
     {
 
-        $baseUrl1 =
-        'https://thepiratebay-plus.strem.fun';
+        // $baseUrl1 =
+        // 'https://thepiratebay-plus.strem.fun';
 
-        $baseUrl2 =
-        'https://torrentio.strem.fun';
+        // $baseUrl2 =
+        // 'https://torrentio.strem.fun';
 
         $baseUrl =
-        'https://movies123-strem.herokuapp.com';
+            'https://movies123-strem.herokuapp.com';
 
         $url = $baseUrl .
-        '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
-        $url1 = $baseUrl1 .
-        '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
-        $url2 = $baseUrl2 .
-        '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
+            '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
+        // $url1 = $baseUrl1 .
+        // '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
+        // $url2 = $baseUrl2 .
+        // '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
 
         $streams =  Http::withHeaders([])->get($url)->json()['streams'];
 
-        $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
+        // $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
 
-        $streams2 = Http::withHeaders([])->get($url2)->json()['streams'];
+        // $streams2 = Http::withHeaders([])->get($url2)->json()['streams'];
 
 
-        $finalStreams = array_merge($streams, $streams1, $streams2);
+        $finalStreams = array_merge($streams);
 
 
         return $finalStreams;

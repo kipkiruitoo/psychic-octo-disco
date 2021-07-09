@@ -118,28 +118,33 @@ class MoviesController extends Controller
 
     public function getTorrents($id)
     {
-        $baseUrl1 =
-            'https://thepiratebay-plus.strem.fun';
+        // $baseUrl1 =
+        //     'https://thepiratebay-plus.strem.fun';
 
-        $baseUrl2 =
-            'https://torrentio.strem.fun';
+        // $baseUrl2 =
+        //     'https://torrentio.strem.fun';
 
         $baseUrl =
             'https://movies123-strem.herokuapp.com';
 
         $url = $baseUrl . '/stream/movie/' . $id . '.json';
-        $url1 = $baseUrl1 . '/stream/movie/' . $id . '.json';
-        $url2 = $baseUrl2 . '/stream/movie/' . $id . '.json';
+        // $url1 = $baseUrl1 . '/stream/movie/' . $id . '.json';
+        // $url2 = $baseUrl2 . '/stream/movie/' . $id . '.json';
 
         // dd($url);
         $streams =  Http::withHeaders([])->get($url)->json()['streams'];
 
-        $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
+        // $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
 
-        $streams2 = Http::withHeaders([])->get($url2)->json()['streams'];
+        // $streams2 = Http::withHeaders([])->get($url2)->json()['streams'];
 
 
-        $finalStreams = array_merge($streams, $streams1, $streams2);
+        $finalStreams = array_merge(
+            $streams,
+
+            // $streams1,
+            //  $streams2
+        );
 
 
         return $finalStreams;
@@ -153,14 +158,14 @@ class MoviesController extends Controller
 
         $viewModel = new MovieViewModel($movie);
 
-        $tbp_torrents = $this->getTorrents($id);
+        $tbp_torrents = $this->getTorrents($movie['imdb_id']);
 
         if ($hash == "dl") {
             $streamurl = request()->get('dlink');
 
             $streamurl = urldecode($streamurl);
-        }else{
-           $streamurl = 'https://server.teamovies.tk/' . $hash . '/0';
+        } else {
+            $streamurl = 'https://server.teamovies.tk/' . $hash . '/0';
         }
 
         // dd($tbp_torrents);
