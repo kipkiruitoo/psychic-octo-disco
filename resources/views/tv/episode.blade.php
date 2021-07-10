@@ -19,6 +19,7 @@ $movie = $tvshow;
 
 @section('content')
 <div class="mt-10 mb-10 p-4">
+    <h1 class="text-4xl mt-4 md:mt-0 font-semibold">{{ $movie['name'] }}</h1>
     <small>Watching Season {{$season['season_number']}} episode {{$episode}}</small>
     <br>
     <hr>

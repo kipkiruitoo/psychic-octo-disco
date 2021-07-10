@@ -15,7 +15,7 @@ $tr = $torrents;
 
 
 @section('content')
-
+<h1 class="text-4xl mt-4 md:mt-0 font-semibold">{{ $movie['title'] }}</h1>
 <div class=" justify-center m-8 p-8">
     <video class="h-full w-full min-w-full max-w-screen-xl min-w-screen-md  vjs-default-skin video-js vjs-fluid "
         id="video_player" controls autoplay>

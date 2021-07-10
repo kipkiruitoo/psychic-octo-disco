@@ -132,7 +132,13 @@ class MoviesController extends Controller
         // $url2 = $baseUrl2 . '/stream/movie/' . $id . '.json';
 
         // dd($url);
-        $streams =  Http::withHeaders([])->get($url)->json()['streams'];
+        $streams =  Http::withHeaders([])->get($url)->json();
+
+        if(isset($streams)){
+            $streams = $streams['streams'];
+        }else{
+            $streams = [];
+        }
 
         // $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
 

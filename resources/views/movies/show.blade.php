@@ -14,7 +14,7 @@ $tr = $torrents;
             <img src="{{ $movie['poster_path'] }}" alt="poster" class="w-64 lg:w-96">
         </div>
         <div class="md:ml-24">
-            <h2 class="text-4xl mt-4 md:mt-0 font-semibold">{{ $movie['title'] }}</h2>
+            <h1 class="text-4xl mt-4 md:mt-0 font-semibold">{{ $movie['title'] }}</h1>
             <div class="flex flex-wrap items-center text-gray-400 text-sm">
                 <svg class="fill-current text-orange-500 w-4" viewBox="0 0 24 24">
                     <g data-name="Layer 2">
