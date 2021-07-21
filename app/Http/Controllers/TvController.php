@@ -152,10 +152,10 @@ class TvController extends Controller
                 if (isset($rand['url'])) {
                     # code...
                     $streamurl = $rand['url'];
-                } else if (isset($rand['infoHash']))  {
+                } else if (isset($rand['infoHash'])) {
                     $streamurl =
                         'https://server.teamovies.tk/' .  $rand['infoHash'] . '/0';
-                }else{
+                } else {
                     $streamurl = "no url";
                 }
             }
@@ -218,7 +218,13 @@ class TvController extends Controller
         // $url2 = $baseUrl2 .
         // '/stream/series/' . $id . urlencode(':' . $season['season_number'] . ':' . $episode) . '.json';
 
-        $streams =  Http::withHeaders([])->get($url)->json()['streams'];
+        $streams =  Http::withHeaders([])->get($url)->json();
+
+        if (isset($streams)) {
+            $streams = $streams['streams'];
+        } else {
+            $streams = [];
+        }
 
         // $streams1 = Http::withHeaders([])->get($url1)->json()['streams'];
 
